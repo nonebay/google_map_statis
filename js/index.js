@@ -1,5 +1,8 @@
 const imgBasePath = '../img/';
 let map;
+let restaurants = [];
+
+window.onload = setData();
 
 /**
  * 地図の初期化と描画
@@ -52,5 +55,28 @@ function createMarker(latLng, imgPath = null) {
         position: latLng,
         map: map,
         icon: imgPath
+    });
+}
+
+/**
+ * 店舗データを設定
+ */
+function setData() {
+    restaurantData.restaurants.forEach(function (restaurant) {
+        restaurants.push({
+            id: restaurant.id,
+            name: restaurant.name,
+            businessHours: restaurant.businessHours,
+            category: restaurant.category,
+            price: restaurant.price,
+            takeoutFlag: restaurant.takeoutFlag,
+            seat: restaurant.seat,
+            photos: restaurant.photos,
+            url: restaurant.url,
+            postNumber: restaurant.postNumber,
+            address: restaurant.address,
+            lat: restaurant.lat,
+            lng: restaurant.lng,
+        });
     });
 }
