@@ -17,7 +17,28 @@ function initMap() {
         ],
     });
 
+    drawCircles([100, 500]);
+
     createMarker(centerLatLng, imgBasePath + headOffice.imgName);
+}
+
+/**
+ * 指定した半径で同心円を描画
+ * @param {Array} radiuses
+ */
+function drawCircles(radiuses) {
+    radiuses.forEach(function (radius) {
+        new google.maps.Circle({
+            center: map.getCenter(),        // 中心座標
+            map: map,                       // 描画対象
+            radius: radius,                 // 半径（m）
+            fillColor: '#FF0000',           // 塗りつぶし色
+            fillOpacity: 0.02,              // 塗りつぶし透過度（0: 透明 ⇔ 1:不透明）
+            strokeColor: '#FF0000',         // 外周色
+            strokeOpacity: 1,               // 外周透過度（0: 透明 ⇔ 1:不透明）
+            strokeWeight: 0.5               // 外周太さ
+        })
+    });
 }
 
 /**
