@@ -11,6 +11,10 @@ function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
         center: centerLatLng,       // 初期の中心座標(必須)
         zoom: 16,                   // 初期の倍率(必須)
+        mapTypeId: 'roadmap',       // 初期の地図タイプ
+        styles: [
+            {featureType: 'poi.business', stylers: [{visibility: 'off'}]}   // 店舗アイコンを非表示
+        ],
     });
 
     createMarker(centerLatLng, imgBasePath + headOffice.imgName);
