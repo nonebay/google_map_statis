@@ -11,4 +11,18 @@ function initMap() {
         center: centerLatLng,       // 初期の中心座標(必須)
         zoom: 16,                   // 初期の倍率(必須)
     });
+
+    createMarker(centerLatLng);
+}
+
+/**
+ * マーカー描画
+ * @param {google.maps.LatLng} latLng
+ * @returns {google.maps.Marker}
+ */
+function createMarker(latLng) {
+    return new google.maps.Marker({
+        position: latLng,
+        map: map,
+    });
 }
