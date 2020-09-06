@@ -1,3 +1,4 @@
+const imgBasePath = '../img/';
 let map;
 
 /**
@@ -12,17 +13,19 @@ function initMap() {
         zoom: 16,                   // 初期の倍率(必須)
     });
 
-    createMarker(centerLatLng);
+    createMarker(centerLatLng, imgBasePath + headOffice.imgName);
 }
 
 /**
  * マーカー描画
  * @param {google.maps.LatLng} latLng
+ * @param {String} imgPath
  * @returns {google.maps.Marker}
  */
-function createMarker(latLng) {
+function createMarker(latLng, imgPath = null) {
     return new google.maps.Marker({
         position: latLng,
         map: map,
+        icon: imgPath
     });
 }
