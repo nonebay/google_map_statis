@@ -1,4 +1,6 @@
 const imgBasePath = '../img/';
+const animationClassLabel = 'animate__bounceInRight';
+const animationClassMarker = 'animate__bounce';
 let map;
 let restaurants = [];
 
@@ -22,7 +24,29 @@ function initMap() {
 
     drawCircles([100, 500]);
 
-    createMarker(centerLatLng, imgBasePath + headOffice.imgName);
+    let centerMarker = createMarker(centerLatLng, imgBasePath + headOffice.imgName);
+    this.setInfoWindow(centerMarker, '本社');
+
+    restaurants.forEach(function (restaurant) {
+        // マーカー描画
+        let marker = createMarker(new google.maps.LatLng(restaurant.lat, restaurant.lng), imgBasePath + restaurant.category.imgName + '#' + restaurant.id);
+
+        // マーカークリックで表へ移動
+        google.maps.event.addListener(marker, 'click', function () {
+            let nameLabel = document.getElementsByClassName('restaurant' + restaurant.id)[0];
+            window.scroll({
+                top: nameLabel.getBoundingClientRect().top,
+                behavior: 'smooth'
+            });
+            nameLabel.classList.add(animationClassLabel);
+            nameLabel.addEventListener('animationend', function () {
+                nameLabel.classList.remove(animationClassLabel);
+            });
+        });
+
+        // マーカーにマウスホバーで店舗名を表示
+        setInfoWindow(marker, restaurant.name);
+    });
 }
 
 /**
@@ -54,7 +78,27 @@ function createMarker(latLng, imgPath = null) {
     return new google.maps.Marker({
         position: latLng,
         map: map,
-        icon: imgPath
+        icon: {
+            url: imgPath,
+            scaledSize: new google.maps.Size(40, 60),
+        },
+    });
+}
+
+/**
+ * 地図上のマーカーにツールチップを追加
+ * @param {google.maps.Marker} marker
+ * @param {string} content
+ */
+function setInfoWindow(marker, content) {
+    let infoWindow = new google.maps.InfoWindow({
+        content: content
+    });
+    google.maps.event.addListener(marker, 'mouseover', function () {
+        infoWindow.open(map, marker);
+    });
+    google.maps.event.addListener(marker, 'mouseout', function () {
+        infoWindow.close();
     });
 }
 
@@ -78,5 +122,28 @@ function setData() {
             lat: restaurant.lat,
             lng: restaurant.lng,
         });
+    });
+}
+
+/**
+ * 地図表示領域にスクロールし、指定店舗を中心に移動する
+ * @param {int} id
+ */
+function toMarker(id) {
+    // 画面スクロール
+    window.scroll({
+        top: 0,
+        behavior: 'smooth'
+    });
+
+    // 地図の中心を移動
+    let restaurant = restaurants.find(restaurant => restaurant.id = id);
+    map.panTo(new google.maps.LatLng(restaurant.lat, restaurant.lng));
+
+    // マーカーにアニメーションを実行
+    let targetMarker = $('img[src $= ".png#' + id + '"]:first');
+    targetMarker.addClass('animate__animated ' + animationClassMarker);
+    targetMarker.on('animationend', function () {
+        targetMarker.removeClass('animate__animated ' + animationClassMarker);
     });
 }
